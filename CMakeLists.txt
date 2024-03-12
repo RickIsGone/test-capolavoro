@@ -7,7 +7,7 @@ enable_testing()
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/release)
 
-add_executable(capolavoro main.cpp classes.cpp classes.h) #WIN32
+add_executable(capolavoro main.cpp classes.cpp classes.h ak47.png) #WIN32
 
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_ttf CONFIG REQUIRED)

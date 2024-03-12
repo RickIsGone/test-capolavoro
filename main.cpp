@@ -16,18 +16,24 @@ int main(int argc,char* argv[]){
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 
     game g;
-
-    g.save();
+    Mouse mouse;
+    
     g.initialize();
-    while(!g.quit){
+
+    do{
 
         while (SDL_PollEvent(&g.event)){
             g.events();
+            mouse.update();
+            g.player.angle=atan2(540-mouse.y,960-mouse.x)*180/M_PI;
+            if(mouse.leftButton) std::cout<<'*';
         }
         
-        g.draw();        
-    }
-    
+        g.draw();  
+
+    }while(!g.quit);
+    g.save();
+
     SDL_Quit();
     TTF_Quit();
     Mix_Quit();

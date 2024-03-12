@@ -18,7 +18,8 @@ public:
     void save();
     void events();
     void draw();
-    
+    int zombieKilled=0,timeSurvived=0;
+
     struct Player{
         int health;
         double angle;
@@ -30,3 +31,9 @@ public:
 
     void initialize();
 }extern g;
+
+struct Mouse{
+    int x, y; 
+    bool leftButton=0;
+    void update();
+}extern mouse;
