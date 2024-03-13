@@ -18,18 +18,23 @@ int main(int argc,char* argv[]){
     game g;
     Mouse mouse;
     
+    g.load();
     g.initialize();
 
     do{
 
         while (SDL_PollEvent(&g.event)){
             g.events();
-            mouse.update();
-            g.player.angle=atan2(540-mouse.y,960-mouse.x)*180/M_PI;
-            if(mouse.leftButton) std::cout<<'*';
+            g.player.gun.angle=atan2(540-mouse.y,960-mouse.x)*180/M_PI;
         }
-        
-        g.draw();  
+
+        mouse.update();
+        if(mouse.leftButton) g.player.gun.shoot();
+        for(Bullets &bullet:g.player.gun.bullets){
+            bullet.hitbox.x+=bullet.xSpeed*5;
+            bullet.hitbox.y+=bullet.ySpeed*5;
+        }
+        g.draw(mouse.x>960);  
 
     }while(!g.quit);
     g.save();

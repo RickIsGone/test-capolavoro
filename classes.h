@@ -5,6 +5,11 @@
 #include <unordered_map>
 #include <vector>
 
+struct Bullets{
+    double xSpeed;
+    double ySpeed;
+    SDL_Rect hitbox;
+};
 
 class game{
     SDL_Window *window=SDL_CreateWindow("capolavoro",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,1920,1080,SDL_WINDOW_ALLOW_HIGHDPI);
@@ -16,17 +21,23 @@ public:
     bool quit=0;
     SDL_Event event;
     void save();
+    void load();
     void events();
-    void draw();
+    void draw(bool right);
     int zombieKilled=0,timeSurvived=0;
 
     struct Player{
         int health;
-        double angle;
         SDL_Rect hitbox;
         SDL_Texture* texture; 
-        void shoot();
         void move();
+        struct Gun{
+            SDL_Texture* texture;
+            SDL_Rect textureTarget;
+            double angle;
+            std::vector<Bullets>bullets;
+            void shoot();
+        }gun;
     }player;
 
     void initialize();

@@ -4,10 +4,20 @@
 #define BULLET_SPEED 2000
 #define PLAYER_SPEED 500
 
+static SDL_Point center={906,540};
+
 void game::save(){
     std::ofstream file("saveFile.rktd");
     file<<timeSurvived<<"\n";
     file<<zombieKilled;
+
+    file.close();
+}
+
+void game::load(){
+    std::ifstream file("saveFile.rktd");
+    file>>timeSurvived;
+    file>>zombieKilled;
 
     file.close();
 }
@@ -21,20 +31,27 @@ void game::events(){
     player.move();
 }
 
-void game::draw(){
+void game::draw(bool right){
 
     SDL_SetRenderDrawColor(renderer,255,0,0,255);
     SDL_RenderDrawRect(renderer,&player.hitbox);
-    SDL_RenderCopyEx(renderer, player.texture, NULL, &player.hitbox, player.angle, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer, player.texture, NULL, &player.hitbox,NULL, NULL, SDL_FLIP_NONE);
+
+    for(Bullets bullet:player.gun.bullets){
+        SDL_RenderFillRect(renderer,&bullet.hitbox);
+    }
+    
+    if(right) SDL_RenderCopyEx(renderer, player.gun.texture, NULL, &player.gun.textureTarget, player.gun.angle, NULL, SDL_FLIP_NONE);
+    else SDL_RenderCopyEx(renderer, player.gun.texture, NULL, &player.gun.textureTarget, player.gun.angle, NULL, SDL_FLIP_VERTICAL);
     SDL_SetRenderDrawColor(renderer,0,0,0,255);
 
     SDL_RenderPresent(renderer);
     SDL_RenderClear(renderer);
 }
 
-void game::Player::shoot(){
-    // sin(angle);
-    // cos(angle);   per stabilire le proporzioni della velocita del proiettile in e y 
+void game::Player::Gun::shoot(){
+    Bullets bullet={-cos(angle*M_PI/180),-sin(angle*M_PI/180),{955,535,10,10}};
+    bullets.push_back(bullet);   
 }
 
 void game::Player::move(){
@@ -48,16 +65,18 @@ void game::Player::move(){
 }
 
 void game::initialize(){
-    player.texture = IMG_LoadTexture(renderer, "ak47.png");
+    player.texture = IMG_LoadTexture(renderer, "player.png");
     if (!player.texture) std::cerr <<"player texture not loaded: "<< SDL_GetError();
-    
+    player.gun.texture = IMG_LoadTexture(renderer, "ak47.png");
+    if (!player.gun.texture) std::cerr <<"gun texture not loaded: "<< SDL_GetError();
+
+    player.gun.textureTarget={900,517,120,46};
     player.health=3;
-    player.angle=0;
-    player.hitbox={920,500,80,80};
+    player.gun.angle=0;
+    player.hitbox={940,490,40,100};
 }
 
 void Mouse::update(){
     Uint32 buttons = SDL_GetMouseState(&x, &y);
     leftButton = (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
-    
 }
