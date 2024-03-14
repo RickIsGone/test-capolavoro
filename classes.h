@@ -5,6 +5,9 @@
 #include <unordered_map>
 #include <vector>
 
+#define BULLET_SPEED 2000
+#define PLAYER_SPEED 500
+
 struct Bullets{
     double xSpeed;
     double ySpeed;
@@ -23,19 +26,25 @@ public:
     void save();
     void load();
     void events();
+    void move();
     void draw(bool right);
     int zombieKilled=0,timeSurvived=0;
+    
+    Uint32 currentTime = 0;
+    Uint32 previousTime = 0;
+    float deltaTime=0;
+    float getDetaTime();
 
     struct Player{
         int health;
         SDL_Rect hitbox;
         SDL_Texture* texture; 
-        void move();
+        
         struct Gun{
             SDL_Texture* texture;
             SDL_Rect textureTarget;
             double angle;
-            std::vector<Bullets>bullets;
+            std::vector<Bullets>bulletsAlive;
             void shoot();
         }gun;
     }player;

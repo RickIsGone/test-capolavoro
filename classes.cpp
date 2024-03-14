@@ -1,10 +1,9 @@
 #include <fstream>
 #include "classes.h"
+#include <SDL.h>
 
-#define BULLET_SPEED 2000
-#define PLAYER_SPEED 500
 
-static SDL_Point center={906,540};
+static const SDL_Point center={906,540};
 
 void game::save(){
     std::ofstream file("saveFile.rktd");
@@ -22,22 +21,44 @@ void game::load(){
     file.close();
 }
 
+float game::getDetaTime(){
+    currentTime = SDL_GetTicks(); 
+    float deltaTime = (currentTime - previousTime) / 1000.0f; 
+    previousTime = currentTime; 
+    return deltaTime;
+}
+
 void game::events(){
     switch(event.type){  
         case SDL_QUIT:
             quit=1;
             break;
     }
-    player.move();
+    
+}
+
+void game::move(){
+    const Uint8* key = SDL_GetKeyboardState(NULL);
+    
+    if(key[SDL_SCANCODE_W]);
+    if(key[SDL_SCANCODE_A]);
+    if(key[SDL_SCANCODE_S]);
+    if(key[SDL_SCANCODE_D]);
+    if(key[SDL_SCANCODE_R]);
+
+    for(Bullets &bullet:player.gun.bulletsAlive){
+        bullet.hitbox.x+=bullet.xSpeed*(BULLET_SPEED*deltaTime);
+        bullet.hitbox.y+=bullet.ySpeed*(BULLET_SPEED*deltaTime);
+    }
 }
 
 void game::draw(bool right){
 
-    SDL_SetRenderDrawColor(renderer,255,0,0,255);
+    SDL_SetRenderDrawColor(renderer,255,255,255,255);
     SDL_RenderDrawRect(renderer,&player.hitbox);
     SDL_RenderCopyEx(renderer, player.texture, NULL, &player.hitbox,NULL, NULL, SDL_FLIP_NONE);
 
-    for(Bullets bullet:player.gun.bullets){
+    for(Bullets bullet:player.gun.bulletsAlive){
         SDL_RenderFillRect(renderer,&bullet.hitbox);
     }
     
@@ -51,26 +72,17 @@ void game::draw(bool right){
 
 void game::Player::Gun::shoot(){
     Bullets bullet={-cos(angle*M_PI/180),-sin(angle*M_PI/180),{955,535,10,10}};
-    bullets.push_back(bullet);   
+    bulletsAlive.push_back(bullet);   
 }
 
-void game::Player::move(){
-    const Uint8* key = SDL_GetKeyboardState(NULL);
-    
-    if(key[SDL_SCANCODE_W]);
-    if(key[SDL_SCANCODE_A]);
-    if(key[SDL_SCANCODE_S]);
-    if(key[SDL_SCANCODE_D]);
-    if(key[SDL_SCANCODE_R]);
-}
 
 void game::initialize(){
     player.texture = IMG_LoadTexture(renderer, "player.png");
-    if (!player.texture) std::cerr <<"player texture not loaded: "<< SDL_GetError();
+    if (!player.texture) std::cout <<"player texture not loaded: "<< SDL_GetError();
     player.gun.texture = IMG_LoadTexture(renderer, "ak47.png");
-    if (!player.gun.texture) std::cerr <<"gun texture not loaded: "<< SDL_GetError();
+    if (!player.gun.texture) std::cout <<"gun texture not loaded: "<< SDL_GetError();
 
-    player.gun.textureTarget={900,517,120,46};
+    player.gun.textureTarget={900,535,120,46};
     player.health=3;
     player.gun.angle=0;
     player.hitbox={940,490,40,100};
