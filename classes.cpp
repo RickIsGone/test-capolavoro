@@ -59,7 +59,7 @@ void game::draw(bool right){
     SDL_RenderCopyEx(renderer, player.texture, NULL, &player.hitbox,NULL, NULL, SDL_FLIP_NONE);
 
     for(Bullets bullet:player.gun.bulletsAlive){
-        SDL_RenderFillRect(renderer,&bullet.hitbox);
+        SDL_RenderFillRectF(renderer,&bullet.hitbox);
     }
     
     if(right) SDL_RenderCopyEx(renderer, player.gun.texture, NULL, &player.gun.textureTarget, player.gun.angle, NULL, SDL_FLIP_NONE);
@@ -71,8 +71,8 @@ void game::draw(bool right){
 }
 
 void game::Player::Gun::shoot(){
-    Bullets bullet={-cos(angle*M_PI/180),-sin(angle*M_PI/180),{955,535,10,10}};
-    bulletsAlive.push_back(bullet);   
+    Bullets bullet={cos(angle*M_PI/180),sin(angle*M_PI/180),{955,535,10,10}};
+    bulletsAlive.push_back(bullet);
 }
 
 

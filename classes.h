@@ -2,16 +2,16 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
-#include <unordered_map>
 #include <vector>
 
-#define BULLET_SPEED 2000
-#define PLAYER_SPEED 500
+#define BULLET_SPEED 6500.0
+#define PLAYER_SPEED 2000.0
+
 
 struct Bullets{
     double xSpeed;
     double ySpeed;
-    SDL_Rect hitbox;
+    SDL_FRect hitbox;
 };
 
 class game{

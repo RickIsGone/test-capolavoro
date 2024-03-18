@@ -29,7 +29,7 @@ int main(int argc,char* argv[]){
 
         while (SDL_PollEvent(&g.event)){
             g.events();
-            g.player.gun.angle=atan2(540-mouse.y,960-mouse.x)*180/M_PI;
+            g.player.gun.angle=atan2(mouse.y-540,mouse.x-960)*180/M_PI;
         }
 
         g.move();
