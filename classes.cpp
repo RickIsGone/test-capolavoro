@@ -45,9 +45,8 @@ void game::move(){
     if(key[SDL_SCANCODE_A]);
     if(key[SDL_SCANCODE_S]);
     if(key[SDL_SCANCODE_D]);
-    if(key[SDL_SCANCODE_R]);
 
-    int index=0;
+    
     for(auto it = player.gun.bulletsAlive.begin(); it != player.gun.bulletsAlive.end();) {
         Bullets &bullet = *it;
         bullet.hitbox.x += bullet.xSpeed * BULLET_SPEED * deltaTime;
