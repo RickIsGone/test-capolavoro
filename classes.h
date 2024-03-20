@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <iostream>
 #include <vector>
 
@@ -27,7 +28,7 @@ public:
     void load();
     void events();
     void move();
-    void draw(bool right);
+    void draw(bool right, TTF_Font* font);
     int zombieKilled=0,timeSurvived=0;
     
     Uint32 currentTime = 0;

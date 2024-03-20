@@ -2,6 +2,7 @@
 #include "classes.h"
 #include <SDL.h>
 
+#include "sdl_functions.hpp"
 
 static const SDL_Point center={906,540};
 
@@ -46,17 +47,26 @@ void game::move(){
     if(key[SDL_SCANCODE_D]);
     if(key[SDL_SCANCODE_R]);
 
-    for(Bullets &bullet:player.gun.bulletsAlive){
-        bullet.hitbox.x+=bullet.xSpeed*(BULLET_SPEED*deltaTime);
-        bullet.hitbox.y+=bullet.ySpeed*(BULLET_SPEED*deltaTime);
+    int index=0;
+    for(auto it = player.gun.bulletsAlive.begin(); it != player.gun.bulletsAlive.end();) {
+        Bullets &bullet = *it;
+        bullet.hitbox.x += bullet.xSpeed * BULLET_SPEED * deltaTime;
+        bullet.hitbox.y += bullet.ySpeed * BULLET_SPEED * deltaTime;
+
+        if(bullet.hitbox.x < -10 || bullet.hitbox.x > 1920 || bullet.hitbox.y < -10 || bullet.hitbox.y > 1080) {
+            it = player.gun.bulletsAlive.erase(it);
+        } 
+        else ++it;
     }
 }
 
-void game::draw(bool right){
+void game::draw(bool right, TTF_Font* font){
 
     SDL_SetRenderDrawColor(renderer,255,255,255,255);
     SDL_RenderDrawRect(renderer,&player.hitbox);
     SDL_RenderCopyEx(renderer, player.texture, NULL, &player.hitbox,NULL, NULL, SDL_FLIP_NONE);
+
+    sdl::v_quick_text("",player.gun.bulletsAlive.size(),255,255,255,20,renderer,font);
 
     for(Bullets bullet:player.gun.bulletsAlive){
         SDL_RenderFillRectF(renderer,&bullet.hitbox);
