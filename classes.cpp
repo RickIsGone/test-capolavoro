@@ -75,7 +75,7 @@ void game::draw(bool right, TTF_Font* font){
     SDL_RenderDrawRect(renderer,&player.hitbox);
     SDL_RenderCopyEx(renderer, player.texture, NULL, &player.hitbox,NULL, NULL, SDL_FLIP_NONE);
 
-    sdl::v_quick_text("",player.gun.bulletsAlive.size(),255,255,255,20,renderer,font);
+    // sdl::v_quick_text("", 1.0f / deltaTime, 255, 255, 255, 20, renderer, font);
 
     for(Bullets bullet:player.gun.bulletsAlive){
         SDL_RenderFillRectF(renderer,&bullet.hitbox);
