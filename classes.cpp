@@ -51,8 +51,18 @@ void game::move(){
         Bullets &bullet = *it;
         bullet.hitbox.x += bullet.xSpeed * BULLET_SPEED * deltaTime;
         bullet.hitbox.y += bullet.ySpeed * BULLET_SPEED * deltaTime;
+        
+        for(auto current=zombieAlive.begin();current!=zombieAlive.end();++current){
+            Zombies &zombie = *current;
 
-        if(bullet.hitbox.x < -10 || bullet.hitbox.x > 1920 || bullet.hitbox.y < -10 || bullet.hitbox.y > 1080) {
+            if(SDL_HasIntersectionF(&zombie.hitbox, &bullet.hitbox)){
+                it = player.gun.bulletsAlive.erase(it);
+                --zombie.health;
+                if(zombie.health==0) current=zombieAlive.erase(current);
+                break;
+            }
+        }
+        if((bullet.hitbox.x < -10 || bullet.hitbox.x > 1920 || bullet.hitbox.y < -10 || bullet.hitbox.y > 1080)) {
             it = player.gun.bulletsAlive.erase(it);
         } 
         else ++it;
@@ -70,13 +80,26 @@ void game::draw(bool right, TTF_Font* font){
     for(Bullets bullet:player.gun.bulletsAlive){
         SDL_RenderFillRectF(renderer,&bullet.hitbox);
     }
-    
+    for(Zombies zombie:zombieAlive){
+        SDL_RenderFillRectF(renderer,&zombie.hitbox);
+    }
+
     if(right) SDL_RenderCopyEx(renderer, player.gun.texture, NULL, &player.gun.textureTarget, player.gun.angle, NULL, SDL_FLIP_NONE);
     else SDL_RenderCopyEx(renderer, player.gun.texture, NULL, &player.gun.textureTarget, player.gun.angle, NULL, SDL_FLIP_VERTICAL);
     SDL_SetRenderDrawColor(renderer,0,0,0,255);
 
     SDL_RenderPresent(renderer);
     SDL_RenderClear(renderer);
+}
+
+void game::spawn(){
+    Zombies zombie;
+    zombie.health=3;
+    zombie.hitbox.x=rand()%2320-200;
+    zombie.hitbox.y=rand()%1480-200;
+    zombie.hitbox.w=40;
+    zombie.hitbox.h=100;
+    zombieAlive.push_back(zombie);
 }
 
 void game::Player::Gun::shoot(){

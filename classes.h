@@ -15,6 +15,11 @@ struct Bullets{
     SDL_FRect hitbox;
 };
 
+struct Zombies{
+    int health;
+    SDL_FRect hitbox;
+};
+
 class game{
     SDL_Window *window=SDL_CreateWindow("capolavoro",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,1920,1080,SDL_WINDOW_ALLOW_HIGHDPI);
     SDL_Event WindowEvent;
@@ -22,19 +27,24 @@ class game{
 public:
 
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    bool quit=0;
+    bool quit = 0;
     SDL_Event event;
     void save();
     void load();
     void events();
     void move();
     void draw(bool right, TTF_Font* font);
+
     int zombieKilled=0,timeSurvived=0;
-    
+    std::vector<Zombies> zombieAlive;
+    void spawn();
+
     Uint32 currentTime = 0;
     Uint32 previousTime = 0;
+    Uint32 timeSinceLastSpawn = 0;
     float deltaTime=0;
     float getDetaTime();
+    
 
     struct Player{
         int health;

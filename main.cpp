@@ -35,13 +35,18 @@ int main(int argc,char* argv[]){
             g.player.gun.angle=atan2(mouse.y-540,mouse.x-960)*180/M_PI;
         }
 
+        if(g.currentTime-g.timeSinceLastSpawn>2000){
+            g.timeSinceLastSpawn=g.currentTime;
+            g.spawn();
+        }
+
         g.move();
 
         g.draw(mouse.x>960,font);
         
     }while(!g.quit);
     g.save();
-
+    
     SDL_Quit();
     TTF_Quit();
     Mix_Quit();
