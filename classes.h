@@ -8,6 +8,7 @@
 
 #define BULLET_SPEED 6500.0
 #define PLAYER_SPEED 500.0
+#define ZOMBIE_SPEED 510.0
 
 
 struct Bullets{

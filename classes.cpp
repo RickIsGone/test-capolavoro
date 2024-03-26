@@ -84,8 +84,19 @@ void game::move(){
             it->isAlive = 0;
         } 
     }
+
     std::erase_if(player.gun.bulletsAlive, [](const Bullets& bullet) { return !bullet.isAlive; });
-    std::erase_if(zombieAlive, [](const Zombies& zombie) { return !zombie.isAlive; });
+    std::erase_if(zombieAlive, [](const Zombies& zombie) { return !zombie.isAlive; });  
+
+    for(auto current=zombieAlive.begin();current!=zombieAlive.end();++current){
+        Zombies& zombie =*current;
+        double angle=atan2(player.hitbox.y - zombie.hitbox.y, player.hitbox.x - zombie.hitbox.x);
+
+        zombie.hitbox.x+=ZOMBIE_SPEED * cos(angle) * deltaTime;
+        zombie.hitbox.y+=ZOMBIE_SPEED * sin(angle) * deltaTime;
+
+    }
+    
 }
 
 void game::draw(bool right, TTF_Font* font){
