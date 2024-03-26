@@ -4,20 +4,23 @@
 #include <SDL_ttf.h>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 #define BULLET_SPEED 6500.0
-#define PLAYER_SPEED 2000.0
+#define PLAYER_SPEED 500.0
 
 
 struct Bullets{
     double xSpeed;
     double ySpeed;
     SDL_FRect hitbox;
+    bool isAlive;
 };
 
 struct Zombies{
     int health;
     SDL_FRect hitbox;
+    bool isAlive;
 };
 
 class game{
@@ -48,15 +51,16 @@ public:
 
     struct Player{
         int health;
-        SDL_Rect hitbox;
+        SDL_FRect hitbox;
         SDL_Texture* texture; 
-        
+        void shoot();
+
         struct Gun{
             SDL_Texture* texture;
-            SDL_Rect textureTarget;
+            SDL_FRect textureTarget;
             double angle;
             std::vector<Bullets>bulletsAlive;
-            void shoot();
+            
         }gun;
     }player;
 

@@ -28,21 +28,22 @@ int main(int argc,char* argv[]){
         g.deltaTime=g.getDetaTime();
 
         mouse.update();
-        if(mouse.leftButton) g.player.gun.shoot();
+        if(mouse.leftButton) g.player.shoot();
 
         while (SDL_PollEvent(&g.event)){
             g.events();
-            g.player.gun.angle=atan2(mouse.y-540,mouse.x-960)*180/M_PI;
+           
         }
-
-        if(g.currentTime-g.timeSinceLastSpawn>2000){
+        g.player.gun.angle=atan2(mouse.y - g.player.hitbox.y-50, mouse.x - g.player.hitbox.x - 20)*180/M_PI;
+        
+        if(g.currentTime-g.timeSinceLastSpawn>1500){
             g.timeSinceLastSpawn=g.currentTime;
             g.spawn();
         }
 
         g.move();
 
-        g.draw(mouse.x>960,font);
+        g.draw(mouse.x>g.player.hitbox.x + 20,font);
         
     }while(!g.quit);
     g.save();
