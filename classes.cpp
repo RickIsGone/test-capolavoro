@@ -42,20 +42,37 @@ void game::move(){
     const Uint8* key = SDL_GetKeyboardState(NULL);
     
     if(key[SDL_SCANCODE_W]){
-        player.hitbox.y -= PLAYER_SPEED * deltaTime;
-        player.gun.textureTarget.y -= PLAYER_SPEED * deltaTime;
+        if(player.hitbox.y - PLAYER_SPEED * deltaTime > 0){
+            player.hitbox.y -= PLAYER_SPEED * deltaTime;
+            player.gun.textureTarget.y -= PLAYER_SPEED * deltaTime;
+        }
+        // else{
+        //     player.hitbox.y = 0;
+        //     // player.gun.textureTarget.y =0;
+        // }
     } 
     if(key[SDL_SCANCODE_A]){
-        player.hitbox.x -= PLAYER_SPEED * deltaTime;
-        player.gun.textureTarget.x -= PLAYER_SPEED * deltaTime;
+        if(player.hitbox.x - PLAYER_SPEED * deltaTime > 0){
+            player.hitbox.x -= PLAYER_SPEED * deltaTime;
+            player.gun.textureTarget.x -= PLAYER_SPEED * deltaTime;
+        }
+        // else{
+        //     player.hitbox.x = 0;
+        //     // player.gun.textureTarget.x = 20;
+        // }
     } 
     if(key[SDL_SCANCODE_S]){
-        player.hitbox.y += PLAYER_SPEED * deltaTime;
-        player.gun.textureTarget.y += PLAYER_SPEED * deltaTime;
+        if(player.hitbox.y < 980){
+            player.hitbox.y += PLAYER_SPEED * deltaTime;
+            player.gun.textureTarget.y += PLAYER_SPEED * deltaTime;
+        }
+        
     } 
     if(key[SDL_SCANCODE_D]){
-        player.hitbox.x += PLAYER_SPEED * deltaTime;
-        player.gun.textureTarget.x += PLAYER_SPEED * deltaTime;
+        if(player.hitbox.x < 1880){
+            player.hitbox.x += PLAYER_SPEED * deltaTime;
+            player.gun.textureTarget.x += PLAYER_SPEED * deltaTime;
+        }
     } 
 
     
